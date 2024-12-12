@@ -1,3 +1,4 @@
+#[derive(Clone)] 
 pub struct Transaction {
   pub value: f64,           //value of transaction
   pub unit: String,         //coin used
