@@ -37,6 +37,9 @@ pub fn load_csv_convert_graph(
   let mut graph_during_crash: HashMap<String, HashMap<String, Transaction>> = HashMap::new();
   let mut graph_after_crash: HashMap<String, HashMap<String, Transaction>> = HashMap::new();
 
+  let mut count_before = 0;
+  let mut count_during = 0;
+  let mut count_after = 0;
   for result in rdr.records() {
       let record = result?;
 
@@ -48,21 +51,26 @@ pub fn load_csv_convert_graph(
 
       let transaction = Transaction::new(value, contract_address, timestamp);
 
-      if timestamp >= start_time && timestamp < during_crash_time {
+      if timestamp >= start_time && timestamp < during_crash_time && count_before < 20000 {
           graph_prior_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
               .insert(to_address.clone(), transaction.clone());
-      } else if timestamp >= during_crash_time && timestamp < after_crash_time {
+          count_before += 1;
+      }
+      else if timestamp >= during_crash_time && timestamp < after_crash_time && count_during < 20000 {
           graph_during_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
               .insert(to_address.clone(), transaction.clone());
-      } else if timestamp >= after_crash_time && timestamp < end_time {
+          count_during += 1;
+      }
+      else if timestamp >= after_crash_time && timestamp < end_time && count_after < 20000 {
           graph_after_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
               .insert(to_address.clone(), transaction.clone());
+          count_after += 1;
       }
   }
   println!("finished data loading......");
