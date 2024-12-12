@@ -1,4 +1,4 @@
-mod analysis {
+mod computation_analysis {
     pub mod computation_algorithms;
 }
 
@@ -14,7 +14,7 @@ mod connected_component {
     pub mod find_connected_component;
 }
 
-use analysis::computation_algorithms;
+use computation_analysis::computation_algorithms;
 use data_cleaning_load::data_loader;
 use utility::helper_algorithm;
 use connected_component::find_connected_component;
