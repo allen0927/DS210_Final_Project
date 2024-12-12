@@ -3,16 +3,15 @@
 
 ## **Context**
 
-This project analyzes a cryptocurrency transaction dataset(mostly stable coins) centered around the crash of the Terra LUNA coin. The dataset includes Ethereum blockchain transactions involving stablecoins and WLUNA (Wrapped LUNA) before, during, and after the Terra LUNA crash in May 2022. Each transaction records details such as the sender, receiver, timestamp, contract address, and transaction value. 
+This project analyzes a cryptocurrency transaction dataset(mostly stable coins) centered around the crash of the Terra LUNA coin. The dataset includes Ethereum blockchain transactions involving stablecoins and WLUNA (Wrapped LUNA) before, during, and after the Terra LUNA crash in May 2022. Each transaction records details such as the sender, receiver, timestamp, contract address, and transaction value. I'm intended to use this dataset to explore the market behavior and structural changes in the transaction network surrounding this critical event in the cryptocurrency space.
+However, the original dataset is too large to do analysis, so I select a range of timestamp to minimize the data used in this project, as the result, there are total of 60000 transactions being considered and analyze in this project(20000 for each graph, the timestamps are one week before LUNA crashed, one week during LUNA crashed, and one week after LUNA crashed).
 
 ### **Dataset Details**
-The dataset was provided by Jason Zhu and colleagues from U Manitoba and UT Dallas. It includes over 70 million transactions, split into three periods:
+The dataset was provided by Jason Zhu and colleagues from U Manitoba and UT Dallas. It includes over 1 million transactions, split into three periods:
 1. **Before the Crash**: One month prior to the LUNA crash.
 2. **During the Crash**: The peak of the crash, when UST (TerraUSD) lost its 1 USD peg.
 3. **After the Crash**: Six months following the collapse.
 
-This dataset allows us to explore the market behavior and structural changes in the transaction network surrounding this critical event in the cryptocurrency space.
-However, the original dataset is too large to do analysis, so I select a range of timestamp to minimize the data used in this project, as the result, there are total of 60000 transactions being considered and analyze in this project(20000 for each graph, the timestamps are one week before LUNA crashed, one week during LUNA crashed, and one week after LUNA crashed).
 ---
 
 ## **Project Goals**
