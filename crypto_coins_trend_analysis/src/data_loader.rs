@@ -11,10 +11,10 @@ pub fn load_csv_convert_graph(
 {
   let mut rdr = ReaderBuilder::new().from_path(path)?;
 
-  let start_time: u64 = 1650412800;       // Start time
+  let start_time: u64 = 1651104000;       // Start time
   let during_crash_time: u64 = 1651708800; // During crash start
   let after_crash_time: u64 = 1652400000; // After crash start
-  let end_time: u64 = 1653696000;         // End time
+  let end_time: u64 = 1652918400;         // End time
 
   let mut graph_prior_crash: HashMap<String, HashMap<String, Transaction>> = HashMap::new();
   let mut graph_during_crash: HashMap<String, HashMap<String, Transaction>> = HashMap::new();
@@ -50,4 +50,19 @@ pub fn load_csv_convert_graph(
   }
 
   Ok((graph_prior_crash, graph_during_crash, graph_after_crash))
+}
+
+
+fn display_graph(graph: &HashMap<String, HashMap<String, Transaction>>, graph_name: &str) {
+  println!("Graph: {}", graph_name);
+  for (from_address, connections) in graph {
+      println!("  From: {}", from_address);
+      for (to_address, transaction) in connections {
+          println!(
+              "    To: {}, Value: {}, Unit: {}, Timestamp: {}",
+              to_address, transaction.value, transaction.unit, transaction.timestamp
+          );
+      }
+  }
+  println!();
 }
