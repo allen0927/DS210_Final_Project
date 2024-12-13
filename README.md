@@ -4,7 +4,7 @@
 ## **Context**
 
 This project analyzes a cryptocurrency transaction dataset(mostly stable coins) centered around the crash of the Terra LUNA coin. The dataset includes Ethereum blockchain transactions involving stablecoins and WLUNA (Wrapped LUNA) before, during, and after the Terra LUNA crash in May 2022. Each transaction records details such as the sender, receiver, timestamp, contract address, and transaction value. I'm intended to use this dataset to explore the market behavior and structural changes in the transaction network surrounding this critical event in the cryptocurrency space.
-However, the original dataset is too large to do analysis, so I select a range of timestamp to minimize the data used in this project, as the result, there are total of 60000 transactions being considered and analyze in this project(20000 for each graph, the timestamps are one week before LUNA crashed, one week during LUNA crashed, and one week after LUNA crashed).
+However, the original dataset is too large to do analysis, so I select a range of timestamp to minimize the data used in this project, as the result, there are total of 30000 transactions being considered and analyze in this project(10000 for each graph, the timestamps are one week before LUNA crashed, one week during LUNA crashed, and one week after LUNA crashed).
 
 ### **Dataset Details**
 The dataset was provided by Chartlist that sponsored by Canadian NSERC. The total amount of transaction in "Stablecoin ERC20 transactions dataset" includes more than 70 millions transactions. The project is using one version of it that includes over 1 million transactions. This dataset "Stablecoin ERC20 transactions dataset" is split into three periods:
@@ -83,7 +83,7 @@ The project investigates several key questions and trends in the transaction net
 
 ## **Conclusion**
 
-The project result shows some trend of the Ethereum transaction network during the Terra LUNA crash(since this project only select 60000 transactions from the dataset, it may be too small to show obvious trend):
+The project result shows some trend of the Ethereum transaction network during the Terra LUNA crash(since this project only select 30000 transactions from the dataset, it may be too small to show obvious trend):
 1. **Decentralization to Fragmentation**:
    - The network started as highly decentralized, with few hubs playing a critical role.
    - Post-crash, the network became more fragmented, with a smaller largest connected component and fewer high-degree nodes.
