@@ -19,6 +19,12 @@ use data_cleaning_load::data_loader;
 use utility::helper_algorithm;
 use connected_component::find_connected_component;
 
+/**************************************************************
+*
+*   Execution level of the project, used all the wrapper functions
+*   from other modules to generate analysis result
+*
+***************************************************************/
 
 fn main() {
     let path: &str = "../token_transfers.csv";
