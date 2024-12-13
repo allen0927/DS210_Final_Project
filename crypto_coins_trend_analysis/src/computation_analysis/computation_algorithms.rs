@@ -8,6 +8,12 @@ use crate::helper_algorithm::Distance;
 //compute_density(), compute_degree_distribution, all_shortest_paths, compute_centrality, 
 //normalize_degree, normalize_betweenness, compute_statistics, find_top_nodes, analyze_centrality_across_periods
 
+/************************************************
+*
+*   Compute the Density of given graph
+*
+*************************************************/
+
 pub fn compute_density(graph: &HashMap<String, HashMap<String, Transaction>>) -> f64 {
     let num_nodes = graph.len();
     let num_edges: usize = graph.values().map(|edges| edges.len()).sum();
@@ -17,7 +23,13 @@ pub fn compute_density(graph: &HashMap<String, HashMap<String, Transaction>>) ->
     }
   
     num_edges as f64 / (num_nodes as f64 * (num_nodes as f64 - 1.0))
-  }
+}
+
+/**************************************************************
+*
+*   Compute the Gegree Distribution of given graph
+*
+***************************************************************/
 
 pub fn compute_degree_distribution(graph: &HashMap<String, HashMap<String, Transaction>>) -> HashMap<usize, usize> {
     let mut degree_count: HashMap<usize, usize> = HashMap::new();
@@ -30,6 +42,14 @@ pub fn compute_degree_distribution(graph: &HashMap<String, HashMap<String, Trans
     degree_count
 }
 
+/**************************************************************
+*
+*   Wrapper Function Call From main.rs
+*   compute the density and degree distribution of three graphs:
+*   Before, During, After LUNA crashes
+*
+***************************************************************/
+
 pub fn analyze_graphs(
     graph_before: &HashMap<String, HashMap<String, Transaction>>,
     graph_during: &HashMap<String, HashMap<String, Transaction>>,
@@ -40,7 +60,7 @@ pub fn analyze_graphs(
     let density_during = compute_density(graph_during);
     let density_after = compute_density(graph_after);
 
-    println!("Graph Density (Before, During, After): {:.4}, {:.4}, {:.4}", density_before, density_during, density_after);
+    println!("Graph Density (Before, During, After): {:?}, {:?}, {:?}", density_before, density_during, density_after);
 
     // Compute degree distribution for each graph
     let degree_dist_before = compute_degree_distribution(graph_before);
@@ -53,6 +73,12 @@ pub fn analyze_graphs(
 
 }
 
+/**************************************************************
+*
+*   Compute the degree centrality and closeness centrality of 
+*   given graph
+*
+***************************************************************/
 
 pub fn compute_centrality(
     graph: &HashMap<String, HashMap<String, Transaction>>,
@@ -84,6 +110,118 @@ pub fn compute_centrality(
     (degree_centrality, closeness_centrality)
 }
 
+/**************************************************************
+*
+*   Helper function to normalize the centrality metrics, which
+*   normalizes the degree centrality
+*
+***************************************************************/
+
+fn normalize_degree(centrality: &HashMap<String, usize>, max_possible_degree: usize) -> HashMap<String, f64> {
+    centrality.iter()
+        .map(|(node, &degree)| (node.clone(), degree as f64 / max_possible_degree as f64))
+        .collect()
+}
+
+/**************************************************************
+*
+*   Helper function to calculate statistics of centrality metrics,
+*   the mean and variance of given centrality metric
+*
+***************************************************************/
+
+fn compute_statistics(centrality: &HashMap<String, f64>) -> (f64, f64) {
+    let n = centrality.len() as f64;
+    let mean = centrality.values().sum::<f64>() / n;
+    let variance = centrality.values().map(|x| (x - mean).powi(2)).sum::<f64>() / n;
+    (mean, variance)
+}
+
+/**************************************************************
+*
+*   Helper function to find Top Degree Nodes (Most Connected Addresses)
+*   from given degree centrality metric(normalized)
+*
+***************************************************************/
+
+fn find_top_nodes(centrality: &HashMap<String, f64>, top_n: usize) -> Vec<(String, f64)> {
+    let mut centrality_vec: Vec<_> = centrality.iter().collect();
+    centrality_vec.sort_by(|a, b| b.1.partial_cmp(a.1).unwrap());
+    centrality_vec.into_iter().take(top_n).map(|(k, v)| (k.clone(), *v)).collect()
+}
+
+/**************************************************************
+*
+*   The wrapper function that encompass all the analysis part for convenience
+*   to be called by main.rs
+*
+***************************************************************/
+
+pub fn analyze_centrality_across_periods(
+  graph_before: &HashMap<String, HashMap<String, Transaction>>,
+  graph_during: &HashMap<String, HashMap<String, Transaction>>,
+  graph_after: &HashMap<String, HashMap<String, Transaction>>,
+) {
+    // Compute centralities for each period
+    let (degree_before, closeness_before) = compute_centrality(graph_before);
+    let (degree_during, closeness_during) = compute_centrality(graph_during);
+    let (degree_after, closeness_after) = compute_centrality(graph_after);
+
+    // Normalize centrality metrics
+    let norm_degree_before = normalize_degree(&degree_before, graph_before.len() - 1);
+    let norm_degree_during = normalize_degree(&degree_during, graph_during.len() - 1);
+    let norm_degree_after = normalize_degree(&degree_after, graph_after.len() - 1);
+
+
+    // Compute summary statistics
+    let (mean_degree_before, var_degree_before) = compute_statistics(&norm_degree_before);
+    let (mean_degree_during, var_degree_during) = compute_statistics(&norm_degree_during);
+    let (mean_degree_after, var_degree_after) = compute_statistics(&norm_degree_after);
+    println!("=== Centrality Analysis ===");
+    println!("Degree Centrality Mean (Before, During, After): {:?}, {:?}, {:?}", mean_degree_before, mean_degree_during, mean_degree_after);
+    println!("Degree Centrality Variance (Before, During, After): {:?}, {:?}, {:?}", var_degree_before, var_degree_during, var_degree_after);
+
+    // Identify top nodes
+    let top_degree_before = find_top_nodes(&norm_degree_before, 5);
+    let top_degree_during = find_top_nodes(&norm_degree_during, 5);
+    let top_degree_after = find_top_nodes(&norm_degree_after, 5);
+    println!("\nTop Degree Nodes (Before): {:?}", top_degree_before);
+    println!("Top Degree Nodes (During): {:?}", top_degree_during);
+    println!("Top Degree Nodes (After): {:?}", top_degree_after);
+
+/*
+  let betweenness_before = compute_betweeness_centrality(graph_before);
+  let betweenness_during = compute_betweeness_centrality(graph_during);
+  let betweenness_after = compute_betweeness_centrality(graph_after);
+
+  let norm_betweenness_before = normalize_betweenness(&betweenness_before, graph_before.len());
+  let norm_betweenness_during = normalize_betweenness(&betweenness_during, graph_during.len());
+  let norm_betweenness_after = normalize_betweenness(&betweenness_after, graph_after.len());
+
+
+  let (mean_betweenness_before, var_betweenness_before) = compute_statistics(&norm_betweenness_before);
+  let (mean_betweenness_during, var_betweenness_during) = compute_statistics(&norm_betweenness_during);
+  let (mean_betweenness_after, var_betweenness_after) = compute_statistics(&norm_betweenness_after);
+  println!("Betweenness Centrality Mean (Before, During, After): {:.2}, {:.2}, {:.2}", mean_betweenness_before, mean_betweenness_during, mean_betweenness_after);
+  println!("Betweenness Centrality Variance (Before, During, After): {:.2}, {:.2}, {:.2}", var_betweenness_before, var_betweenness_during, var_betweenness_after);
+
+  let top_betweenness_before = find_top_nodes(&norm_betweenness_before, 5);
+  let top_betweenness_during = find_top_nodes(&norm_betweenness_during, 5);
+  let top_betweenness_after = find_top_nodes(&norm_betweenness_after, 5);
+
+  println!("\nTop Betweenness Nodes (Before): {:?}", top_betweenness_before);
+  println!("Top Betweenness Nodes (During): {:?}", top_betweenness_during);
+  println!("Top Betweenness Nodes (After): {:?}", top_betweenness_after);
+*/
+}
+
+/*
+/**************************************************************
+*
+*   Helper function used for computation of betweeness centrality,
+*   which finds all shortest path from given node in the graph
+*
+***************************************************************/
 pub fn all_shortest_paths(
     graph: &HashMap<String, HashMap<String, Transaction>>,
     start: &str,
@@ -137,6 +275,13 @@ pub fn all_shortest_paths(
     shortest_paths
 }
 
+/**************************************************************
+*
+*   Compute the betweeness centrality of a graph, which is a
+*   measure of centrality in a graph based on shortest paths.
+*
+***************************************************************/
+
 pub fn compute_betweeness_centrality(
     graph: &HashMap<String, HashMap<String, Transaction>>
 ) -> HashMap<String, f64>{
@@ -169,11 +314,12 @@ pub fn compute_betweeness_centrality(
     
     betweenness_centrality
 }
-fn normalize_degree(centrality: &HashMap<String, usize>, max_possible_degree: usize) -> HashMap<String, f64> {
-    centrality.iter()
-        .map(|(node, &degree)| (node.clone(), degree as f64 / max_possible_degree as f64))
-        .collect()
-}
+
+/**************************************************************
+*
+*   Normalizes the result after computed the betweeness centrality
+*
+***************************************************************/
 
 fn normalize_betweenness(centrality: &HashMap<String, f64>, n: usize) -> HashMap<String, f64> {
     let max_possible = (n - 1) as f64 * (n - 2) as f64;
@@ -181,74 +327,4 @@ fn normalize_betweenness(centrality: &HashMap<String, f64>, n: usize) -> HashMap
         .map(|(node, &value)| (node.clone(), value / max_possible))
         .collect()
 }
-
-fn compute_statistics(centrality: &HashMap<String, f64>) -> (f64, f64) {
-    let n = centrality.len() as f64;
-    let mean = centrality.values().sum::<f64>() / n;
-    let variance = centrality.values().map(|x| (x - mean).powi(2)).sum::<f64>() / n;
-    (mean, variance)
-}
-
-fn find_top_nodes(centrality: &HashMap<String, f64>, top_n: usize) -> Vec<(String, f64)> {
-    let mut centrality_vec: Vec<_> = centrality.iter().collect();
-    centrality_vec.sort_by(|a, b| b.1.partial_cmp(a.1).unwrap());
-    centrality_vec.into_iter().take(top_n).map(|(k, v)| (k.clone(), *v)).collect()
-}
-
-pub fn analyze_centrality_across_periods(
-  graph_before: &HashMap<String, HashMap<String, Transaction>>,
-  graph_during: &HashMap<String, HashMap<String, Transaction>>,
-  graph_after: &HashMap<String, HashMap<String, Transaction>>,
-) {
-    // Compute centralities for each period
-    let (degree_before, closeness_before) = compute_centrality(graph_before);
-    let (degree_during, closeness_during) = compute_centrality(graph_during);
-    let (degree_after, closeness_after) = compute_centrality(graph_after);
-
-    // Normalize centrality metrics
-    let norm_degree_before = normalize_degree(&degree_before, graph_before.len() - 1);
-    let norm_degree_during = normalize_degree(&degree_during, graph_during.len() - 1);
-    let norm_degree_after = normalize_degree(&degree_after, graph_after.len() - 1);
-
-
-    // Compute summary statistics
-    let (mean_degree_before, var_degree_before) = compute_statistics(&norm_degree_before);
-    let (mean_degree_during, var_degree_during) = compute_statistics(&norm_degree_during);
-    let (mean_degree_after, var_degree_after) = compute_statistics(&norm_degree_after);
-    println!("=== Centrality Analysis ===");
-    println!("Degree Centrality Mean (Before, During, After): {:.2}, {:.2}, {:.2}", mean_degree_before, mean_degree_during, mean_degree_after);
-    println!("Degree Centrality Variance (Before, During, After): {:.2}, {:.2}, {:.2}", var_degree_before, var_degree_during, var_degree_after);
-
-    // Identify top nodes
-    let top_degree_before = find_top_nodes(&norm_degree_before, 5);
-    let top_degree_during = find_top_nodes(&norm_degree_during, 5);
-    let top_degree_after = find_top_nodes(&norm_degree_after, 5);
-    println!("\nTop Degree Nodes (Before): {:?}", top_degree_before);
-    println!("Top Degree Nodes (During): {:?}", top_degree_during);
-    println!("Top Degree Nodes (After): {:?}", top_degree_after);
-
-/*
-  let betweenness_before = compute_betweeness_centrality(graph_before);
-  let betweenness_during = compute_betweeness_centrality(graph_during);
-  let betweenness_after = compute_betweeness_centrality(graph_after);
-
-  let norm_betweenness_before = normalize_betweenness(&betweenness_before, graph_before.len());
-  let norm_betweenness_during = normalize_betweenness(&betweenness_during, graph_during.len());
-  let norm_betweenness_after = normalize_betweenness(&betweenness_after, graph_after.len());
-
-
-  let (mean_betweenness_before, var_betweenness_before) = compute_statistics(&norm_betweenness_before);
-  let (mean_betweenness_during, var_betweenness_during) = compute_statistics(&norm_betweenness_during);
-  let (mean_betweenness_after, var_betweenness_after) = compute_statistics(&norm_betweenness_after);
-  println!("Betweenness Centrality Mean (Before, During, After): {:.2}, {:.2}, {:.2}", mean_betweenness_before, mean_betweenness_during, mean_betweenness_after);
-  println!("Betweenness Centrality Variance (Before, During, After): {:.2}, {:.2}, {:.2}", var_betweenness_before, var_betweenness_during, var_betweenness_after);
-
-  let top_betweenness_before = find_top_nodes(&norm_betweenness_before, 5);
-  let top_betweenness_during = find_top_nodes(&norm_betweenness_during, 5);
-  let top_betweenness_after = find_top_nodes(&norm_betweenness_after, 5);
-
-  println!("\nTop Betweenness Nodes (Before): {:?}", top_betweenness_before);
-  println!("Top Betweenness Nodes (During): {:?}", top_betweenness_during);
-  println!("Top Betweenness Nodes (After): {:?}", top_betweenness_after);
 */
-}
