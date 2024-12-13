@@ -2,6 +2,13 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use crate::data_loader::Transaction;
 
+/**************************************************************
+*
+*   Compute the larges connected component of given graph, the
+*   the result will be the size of largest connected component
+*
+***************************************************************/
+
 pub fn largest_connected_component(graph: &HashMap<String, HashMap<String, Transaction>>) -> usize {
   let mut visited = HashSet::new();
   let mut max_size = 0;
@@ -15,6 +22,15 @@ pub fn largest_connected_component(graph: &HashMap<String, HashMap<String, Trans
 
   max_size
 }
+
+/**************************************************************
+*
+*   The helper function used for calculation of size of connected
+*   component, the algorithm modifed from the DFS algorithm, it
+*   used stack to store the visited component and pop until all
+*   component is visited
+*
+***************************************************************/
 
 fn dfs_component_size(
   graph: &HashMap<String, HashMap<String, Transaction>>,
@@ -39,6 +55,14 @@ fn dfs_component_size(
 
   size
 }
+
+/**************************************************************
+*
+*   A wrapper function for convenience to be called in main.rs
+*   which analyze and display the largest connected component 
+*   of the graph
+*
+***************************************************************/
 
 pub fn analyze_largest_components(
   graph_before: &HashMap<String, HashMap<String, Transaction>>,
