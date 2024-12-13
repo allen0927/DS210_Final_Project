@@ -4,7 +4,15 @@ use std::collections::BinaryHeap;
 use crate::data_loader::Transaction;
 
 //dijkstra
-
+/**************************************************************
+*
+*   The datastructure Distance represent teh distance of graph,
+*   which also represent the weight value, but since weight is
+*   f64, could not directly used in Binary Heap, so defined a
+*   new datastructure that implements tha required traits for
+*   Binary Heap
+*
+***************************************************************/
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Distance(pub f64);
 
@@ -15,6 +23,14 @@ impl Ord for Distance {
         self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
     }
 }
+
+/**************************************************************
+*
+*   The helper function dijkstra algorithm for calculation of
+*   shortest path in the weighted graph(non-negative weight),
+*   implemented to fit the defined graph in this project
+*
+***************************************************************/
 
 pub fn dijkstra(
     graph: &HashMap<String, HashMap<String, Transaction>>,
