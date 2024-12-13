@@ -2,12 +2,29 @@ use std::collections::HashMap;
 use csv::ReaderBuilder;
 
 //Transaction, load_csv_convert_graph, display_graph
+
+/**************************************************************
+*
+*   The datastructure defined to represent the weight of the graph
+*   which includes three fields:
+*   value: represent the numerical value used in transaction
+*   unit: the coin used in this transaction, also unit of value
+*   timestamp: the time of transaction executed, express in unix epoch time
+*
+***************************************************************/
+
 #[derive(Clone)] 
 pub struct Transaction {
   pub value: f64,           //value of transaction
   pub unit: String,         //coin used
   pub timestamp: u64,       //time of transaction, if time1 < time2, then time1 is earlier than time2
 }
+
+/**************************************************************
+*
+*   The constructor of a Transaction type instances
+*
+***************************************************************/
 
 impl Transaction {
   pub fn new(value: f64, unit:String, timestamp: u64) -> Self {
@@ -18,6 +35,18 @@ impl Transaction {
       }
   }
 }
+
+/**************************************************************
+*
+*   The function that load the dataset and convert into weighted graph
+*   the weighted graph is defined as:
+*   HashMap<String, HashMap<String, Transaction>>
+*   The key(node) in hashmap is the from_address in dataset, which represented
+*   in String type, the value of outer hashmap represent the outdegree of
+*   of current key(node), the inner hashmap the store the weight and node that
+*   outer key pointed to.
+*
+***************************************************************/
 
 pub fn load_csv_convert_graph(
   path: &str,
@@ -51,21 +80,21 @@ pub fn load_csv_convert_graph(
 
       let transaction = Transaction::new(value, contract_address, timestamp);
 
-      if timestamp >= start_time && timestamp < during_crash_time && count_before < 20000 {
+      if timestamp >= start_time && timestamp < during_crash_time && count_before < 10000 {
           graph_prior_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
               .insert(to_address.clone(), transaction.clone());
           count_before += 1;
       }
-      else if timestamp >= during_crash_time && timestamp < after_crash_time && count_during < 20000 {
+      else if timestamp >= during_crash_time && timestamp < after_crash_time && count_during < 10000 {
           graph_during_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
               .insert(to_address.clone(), transaction.clone());
           count_during += 1;
       }
-      else if timestamp >= after_crash_time && timestamp < end_time && count_after < 20000 {
+      else if timestamp >= after_crash_time && timestamp < end_time && count_after < 10000 {
           graph_after_crash
               .entry(from_address.clone())
               .or_insert_with(HashMap::new)
@@ -77,6 +106,12 @@ pub fn load_csv_convert_graph(
   Ok((graph_prior_crash, graph_during_crash, graph_after_crash))
 }
 
+/**************************************************************
+*
+*   The helper function to display the defined graph in a more
+*   human-readable way
+*
+***************************************************************/
 
 pub fn display_graph(graph: &HashMap<String, HashMap<String, Transaction>>, graph_name: &str) {
   println!("Graph: {}", graph_name);
