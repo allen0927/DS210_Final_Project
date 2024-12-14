@@ -110,7 +110,8 @@ These findings highlight how crises can reshape the structure of transaction net
    ```bash
    cargo run
    cargo run --release   #For faster compilation
-4. The result of the project is also included into the github, it could be used for comparison.
+   cargo test            #Execute the utility tests module
+5. The result of the project is also included into the github, it could be used for comparison.
 Note: If the dataset is unavailable to directly clone from github, here's the link to downlaod the dataset:
    - https://chartalist.org/eth/StablecoinAnalysis.html
    - In the tab: Transaction graphs of the six networks, select the Version 1 that has 822 MB with descrioption "From Apr-28-2022 To May-24-2022"
