@@ -14,10 +14,15 @@ mod connected_component {
     pub mod find_connected_component;
 }
 
+mod tests {
+    pub mod utility_tests;
+}
+
 use computation_analysis::computation_algorithms;
 use data_cleaning_load::data_loader;
 use utility::helper_algorithm;
 use connected_component::find_connected_component;
+use tests::utility_tests;
 
 /**************************************************************
 *
@@ -25,6 +30,7 @@ use connected_component::find_connected_component;
 *   from other modules to generate analysis result
 *
 ***************************************************************/
+
 
 fn main() {
     let path: &str = "../token_transfers.csv";
