@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
-use crate::data_loader::Transaction;
+use crate::data_cleaning_load::data_loader::{Transaction, load_csv_convert_graph, display_graph};
 
 /**************************************************************
 *
@@ -13,9 +13,13 @@ pub fn largest_connected_component(graph: &HashMap<String, HashMap<String, Trans
   let mut visited = HashSet::new();
   let mut max_size = 0;
 
-  for node in graph.keys() {
-      if !visited.contains(node) {
-          let size = dfs_component_size(graph, node, &mut visited);
+  // Sort the keys to ensure consistent iteration order, otherwise it may generate different result every run
+  let mut nodes: Vec<_> = graph.keys().cloned().collect();
+  nodes.sort();
+
+  for node in nodes {
+      if !visited.contains(&node) {
+          let size = dfs_component_size(graph, &node, &mut visited);
           max_size = max_size.max(size);
       }
   }
@@ -32,7 +36,7 @@ pub fn largest_connected_component(graph: &HashMap<String, HashMap<String, Trans
 *
 ***************************************************************/
 
-fn dfs_component_size(
+pub fn dfs_component_size(
   graph: &HashMap<String, HashMap<String, Transaction>>,
   start: &str,
   visited: &mut HashSet<String>,
