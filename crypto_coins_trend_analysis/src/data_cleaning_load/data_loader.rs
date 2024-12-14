@@ -38,6 +38,23 @@ impl Transaction {
 
 /**************************************************************
 *
+*   Formatted the Transaction datastructure, so that it could be
+*   printed
+*
+***************************************************************/
+
+impl std::fmt::Debug for Transaction {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "Transaction {{ value: {}, unit: {}, timestamp: {} }}",
+            self.value, self.unit, self.timestamp
+        )
+    }
+}
+
+/**************************************************************
+*
 *   The function that load the dataset and convert into weighted graph
 *   the weighted graph is defined as:
 *   HashMap<String, HashMap<String, Transaction>>
