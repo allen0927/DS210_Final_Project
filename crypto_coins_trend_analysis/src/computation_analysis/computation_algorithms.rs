@@ -117,7 +117,7 @@ pub fn compute_centrality(
 *
 ***************************************************************/
 
-fn normalize_degree(centrality: &HashMap<String, usize>, max_possible_degree: usize) -> HashMap<String, f64> {
+pub fn normalize_degree(centrality: &HashMap<String, usize>, max_possible_degree: usize) -> HashMap<String, f64> {
     centrality.iter()
         .map(|(node, &degree)| (node.clone(), degree as f64 / max_possible_degree as f64))
         .collect()
@@ -130,7 +130,7 @@ fn normalize_degree(centrality: &HashMap<String, usize>, max_possible_degree: us
 *
 ***************************************************************/
 
-fn compute_statistics(centrality: &HashMap<String, f64>) -> (f64, f64) {
+pub fn compute_statistics(centrality: &HashMap<String, f64>) -> (f64, f64) {
     let n = centrality.len() as f64;
     let mean = centrality.values().sum::<f64>() / n;
     let variance = centrality.values().map(|x| (x - mean).powi(2)).sum::<f64>() / n;
@@ -144,7 +144,7 @@ fn compute_statistics(centrality: &HashMap<String, f64>) -> (f64, f64) {
 *
 ***************************************************************/
 
-fn find_top_nodes(centrality: &HashMap<String, f64>, top_n: usize) -> Vec<(String, f64)> {
+pub fn find_top_nodes(centrality: &HashMap<String, f64>, top_n: usize) -> Vec<(String, f64)> {
     let mut centrality_vec: Vec<_> = centrality.iter().collect();
     centrality_vec.sort_by(|a, b| b.1.partial_cmp(a.1).unwrap());
     centrality_vec.into_iter().take(top_n).map(|(k, v)| (k.clone(), *v)).collect()
