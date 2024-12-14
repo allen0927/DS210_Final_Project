@@ -57,6 +57,7 @@ The project investigates several key questions and trends in the transaction net
 
 ### **3. Centrality Analysis**
 #### **Top Degree Nodes (Most Connected Addresses):**
+*Note: The centrality also implement the betweeness centraility but with too large runtime, so I did not include this part in analysis, the implementation is in the code with comment, remove the comment to check the result if you wish*
 - **Before Crash**:
   - `0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511`: 5.15% of total connections.
   - Other high-degree nodes had a similar share of the network.
