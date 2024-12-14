@@ -34,9 +34,9 @@ The project investigates several key questions and trends in the transaction net
 ## **Results**
 
 ### **1. Graph Density**
-- **Before Crash**: 0.00021932799298483684
-- **During Crash**: 0.00023757125792487135
-- **After Crash**: 0.0004041556517625577
+- **Before Crash**: 0.00044240038646614237
+- **During Crash**: 0.0004227988524721431
+- **After Crash**: 0.0006173681697250836
 
 **Interpretation**:
 - The network's density remained low throughout the periods, reflecting a sparse transaction network where only a small proportion of possible connections exist.
@@ -45,9 +45,10 @@ The project investigates several key questions and trends in the transaction net
 ---
 
 ### **2. Degree Distribution**
-- **Before Crash**: The majority of nodes had very few connections (degree 1), but there were a few highly connected nodes (hubs) with degrees up to 452.
-- **During Crash**: A similar pattern persisted, with slightly more nodes showing higher degrees.
-- **After Crash**: A smaller number of high-degree nodes and a drop in the maximum degree.
+- Before Crash: The majority of nodes had very few connections (degree 1, with 3,823 nodes), but there were moderately connected nodes (degrees like 139 and 199) and a few highly connected hubs (maximum degree: 262).
+- During Crash: A similar pattern persisted, with most nodes having degree 1 (3,966 nodes). Some hubs appeared with degrees up to 261, showing slightly more higher-degree nodes.
+- After Crash: There were fewer high-degree nodes, with the majority still having degree 1 (2,975 nodes). The maximum degree dropped to 228, indicating reduced connectivity.
+
 
 **Interpretation**:
 - The degree distribution indicates that the network was highly decentralized before and during the crash, dominated by many low-degree nodes and a few high-degree hubs.
@@ -59,12 +60,12 @@ The project investigates several key questions and trends in the transaction net
 #### **Top Degree Nodes (Most Connected Addresses):**
 *Note: The centrality also implement the betweeness centraility but with too large runtime, so I did not include this part in analysis, the implementation is in the code with comment, remove the comment to check the result if you wish*
 - **Before Crash**:
-  - `0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511`: 5.15% of total connections.
+  - `0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511`: 5.98% of total connections.
   - Other high-degree nodes had a similar share of the network.
 - **During Crash**:
-  - Slight increases in centrality for the top nodes (e.g., `0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511`: 5.85%).
+  - Slight increases in centrality for the top nodes (e.g., `0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511`: 5.80%).
 - **After Crash**:
-  - A new address, `0x0000000000000000000000000000000000000000`, emerged as the top node (7.58% of connections), possibly reflecting a centralized recovery mechanism or significant single-entity involvement.
+  - A new address, `0x0000000000000000000000000000000000000000`, emerged as the top node (6.66% of connections), possibly reflecting a centralized recovery mechanism or significant single-entity involvement.
 
 **Interpretation**:
 - The emergence of a dominant node post-crash suggests a centralization trend, possibly due to concentrated rescue efforts or reduced network activity.
@@ -72,9 +73,9 @@ The project investigates several key questions and trends in the transaction net
 ---
 
 ### **4. Largest Connected Component**
-- **Before Crash**: 6,025 nodes.
-- **During Crash**: 5,614 nodes.
-- **After Crash**: 4,476 nodes.
+- **Before Crash**: 2,713 nodes.
+- **During Crash**: 2,708 nodes.
+- **After Crash**: 2,253 nodes.
 
 **Interpretation**:
 - The largest connected component shrank over time, reflecting increased fragmentation in the transaction network after the crash.
@@ -95,7 +96,7 @@ The project result shows some trend of the Ethereum transaction network during t
 3. **Low but Increasing Density**:
    - The slight increase in density post-crash reflects tighter activity among fewer remaining participants.
 
-These findings highlight how crises can reshape the structure of transaction networks, reducing overall participation while consolidating influence among key players. This analysis provides a foundation for further exploration, such as investigating the role of individual addresses or temporal patterns in transaction activity.
+These findings highlight how crises have the influence on transaction networks, reducing overall participation while consolidating influence among key players.
 
 ---
 
