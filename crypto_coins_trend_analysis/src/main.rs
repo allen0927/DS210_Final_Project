@@ -33,7 +33,7 @@ use tests::utility_tests;
 
 
 fn main() {
-    let path: &str = "../token_transfers.csv";
+    let path: &str = "../selected_rows.csv";
     let graphs = data_loader::load_csv_convert_graph(path);
     println!("finished loading graph......");
     match graphs {
