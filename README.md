@@ -12,7 +12,7 @@ The original dataset was provided by Chartlist that sponsored by Canadian NSERC.
 2. **During the Crash**: The peak of the crash, when UST (TerraUSD) lost its 1 USD peg.
 3. **After the Crash**: Six months following the collapse.
 
-However, in this project I onlyt select 30000 rows from the original dataset and also splitted iunto three periods:
+However, in this project I only select 30000 rows from the original dataset and also splitted iunto three periods:
 1. **Before the Crash**: One week prior to the LUNA crash.
 2. **During the Crash**: One week during the crash, when the LUNA crashed until lower than 1 USD .
 3. **After the Crash**: One week after the LUNA crash.
