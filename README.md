@@ -7,11 +7,15 @@ This project analyzes a cryptocurrency transaction dataset(mostly stable coins) 
 However, the original dataset is too large to do analysis, so I select a range of timestamp to minimize the data used in this project, as the result, there are total of 30000 transactions being considered and analyze in this project(10000 for each graph, the timestamps are one week before LUNA crashed, one week during LUNA crashed, and one week after LUNA crashed).
 
 ### **Dataset Details**
-The dataset was provided by Chartlist that sponsored by Canadian NSERC. The total amount of transaction in "Stablecoin ERC20 transactions dataset" includes more than 70 millions transactions. The project is using one version of it that includes over 1 million transactions. This dataset "Stablecoin ERC20 transactions dataset" is split into three periods:
+The original dataset was provided by Chartlist that sponsored by Canadian NSERC. The total amount of transaction in "Stablecoin ERC20 transactions dataset" includes more than 70 millions transactions. The project is using one version of it that includes over 1 million transactions. This dataset "Stablecoin ERC20 transactions dataset" is split into three periods:
 1. **Before the Crash**: One month prior to the LUNA crash.
 2. **During the Crash**: The peak of the crash, when UST (TerraUSD) lost its 1 USD peg.
 3. **After the Crash**: Six months following the collapse.
 
+However, in this project I onlyt select 30000 rows from the original dataset and also splitted iunto three periods:
+1. **Before the Crash**: One week prior to the LUNA crash.
+2. **During the Crash**: One week during the crash, when the LUNA crashed until lower than 1 USD .
+3. **After the Crash**: One week after the LUNA crash.
 ---
 
 ## **Project Goals**
